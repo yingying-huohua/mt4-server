@@ -1,0 +1,426 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "交易分析系统接口",
+    "description": "",
+    "version": "1.0"
+  },
+  "produces": ["application/json"],
+  "paths": {
+    "/order/history": {
+      "get": {
+        "x-swagger-router-controller": "bar",
+        "operationId": "impossible",
+        "tags": ["/order"],
+        "description": "交易历史",
+        "parameters": [
+          { "name": "userid", "in": "formData", "required": true, "type": "string",
+            "description": "账户"
+          },
+          { "name": "symbol", "in": "formData", "required": false, "type": "string",
+            "description": "品种"
+          },
+          { "name": "openStart", "in": "formData", "required": false, "type": "string",
+            "description": "开仓开始时间"
+          },
+          { "name": "openEnd", "in": "formData", "required": false, "type": "string",
+            "description": "开仓结束时间"
+          },
+          { "name": "sortField", "in": "formData", "required": false, "type": "string",
+            "description": "排序字段"
+          },
+          { "name": "direction", "in": "formData", "required": false, "type": "string",
+            "description": "升降序（desc, asc）"
+          },
+          {
+            "name": "pageNo", "in": "formData","required": false, "type": "int",
+            "description": "页码"
+          },
+          {
+            "name": "pageSize", "in": "formData", "required": false, "type": "int",
+            "description": "每页大小"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/order/position": {
+      "get": {
+        "x-swagger-router-controller": "bar",
+        "operationId": "impossible",
+        "tags": ["/order"],
+        "description": "实时持仓",
+        "parameters": [
+          { "name": "userid", "in": "formData", "required": true, "type": "string",
+            "description": "账户"
+          },
+          { "name": "symbol", "in": "formData", "required": false, "type": "string",
+            "description": "品种"
+          },
+          { "name": "openStart", "in": "formData", "required": false, "type": "string",
+            "description": "开仓开始时间"
+          },
+          { "name": "openEnd", "in": "formData", "required": false, "type": "string",
+            "description": "开仓结束时间"
+          },
+          { "name": "comment", "in": "formData", "required": false, "type": "string",
+            "description": "备注"
+          },
+          { "name": "sortField", "in": "formData", "required": false, "type": "string",
+            "description": "排序字段"
+          },
+          { "name": "direction", "in": "formData", "required": false, "type": "string",
+            "description": "升降序（desc, asc）"
+          },
+          {
+            "name": "pageNo", "in": "formData","required": false, "type": "int",
+            "description": "页码"
+          },
+          {
+            "name": "pageSize", "in": "formData", "required": false, "type": "int",
+            "description": "每页大小"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/order/profit/user/list": {
+      "get": {
+        "x-swagger-router-controller": "bar",
+        "operationId": "impossible",
+        "tags": ["/order"],
+        "description": "用户收益排行",
+        "parameters": [
+          { "name": "accountId", "in": "formData", "required": false, "type": "string",
+            "description": "账户"
+          },
+          { "name": "symbol", "in": "formData", "required": false, "type": "string",
+            "description": "品种"
+          },
+          { "name": "openStart", "in": "formData", "required": false, "type": "string",
+            "description": "开仓时间开始"
+          },
+          { "name": "openEnd", "in": "formData", "required": false, "type": "string",
+            "description": "开仓时间结束"
+          },
+          { "name": "minReturn", "in": "formData", "required": false, "type": "string",
+            "description": "最小收益"
+          },
+          { "name": "maxReturn", "in": "formData", "required": false, "type": "string",
+            "description": "最大收益"
+          },
+          { "name": "sortField", "in": "formData", "required": false, "type": "string",
+            "description": "排序字段"
+          },
+          { "name": "direction", "in": "formData", "required": false, "type": "string",
+            "description": "升降序（desc, asc）"
+          },
+          {
+            "name": "pageNo", "in": "formData","required": false, "type": "int",
+            "description": "页码"
+          },
+          {
+            "name": "pageSize", "in": "formData", "required": false, "type": "int",
+            "description": "每页大小"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/order/profit/user/detail": {
+      "get": {
+        "x-swagger-router-controller": "bar",
+        "operationId": "impossible",
+        "tags": ["/order"],
+        "description": "用户收益明细",
+        "parameters": [
+          { "name": "accountId", "in": "formData", "required": false, "type": "string",
+            "description": "账户"
+          },
+          { "name": "symbol", "in": "formData", "required": false, "type": "string",
+            "description": "品种"
+          },
+          { "name": "openStart", "in": "formData", "required": false, "type": "string",
+            "description": "开仓时间开始"
+          },
+          { "name": "openEnd", "in": "formData", "required": false, "type": "string",
+            "description": "开仓时间结束"
+          },
+          { "name": "sortField", "in": "formData", "required": false, "type": "string",
+            "description": "排序字段"
+          },
+          { "name": "direction", "in": "formData", "required": false, "type": "string",
+            "description": "升降序（desc, asc）"
+          },
+          {
+            "name": "pageNo", "in": "formData","required": false, "type": "int",
+            "description": "页码"
+          },
+          {
+            "name": "pageSize", "in": "formData", "required": false, "type": "int",
+            "description": "每页大小"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/order/profit/symbol/list": {
+      "get": {
+        "x-swagger-router-controller": "bar",
+        "operationId": "impossible",
+        "tags": ["/order"],
+        "description": "品种收益（用户盈亏占比）",
+        "parameters": [
+          { "name": "symbol", "in": "formData", "required": false, "type": "string",
+            "description": "品种"
+          },
+          { "name": "openStart", "in": "formData", "required": false, "type": "string",
+            "description": "开仓时间开始"
+          },
+          { "name": "openEnd", "in": "formData", "required": false, "type": "string",
+            "description": "开仓时间结束"
+          },
+          { "name": "sortField", "in": "formData", "required": false, "type": "string",
+            "description": "排序字段"
+          },
+          { "name": "direction", "in": "formData", "required": false, "type": "string",
+            "description": "升降序（desc, asc）"
+          },
+          {
+            "name": "pageNo", "in": "formData","required": false, "type": "int",
+            "description": "页码"
+          },
+          {
+            "name": "pageSize", "in": "formData", "required": false, "type": "int",
+            "description": "每页大小"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/order/profit/symbol/user/list": {
+      "get": {
+        "x-swagger-router-controller": "bar",
+        "operationId": "impossible",
+        "tags": ["/order"],
+        "description": "品种收益盈亏用户列表",
+        "parameters": [
+          { "name": "returnType", "in": "formData", "required": true, "type": "string",
+            "description": "1:盈利， 2：亏损， 3：持平"
+          },
+          { "name": "symbol", "in": "formData", "required": false, "type": "string",
+            "description": "品种"
+          },
+          { "name": "openStart", "in": "formData", "required": false, "type": "string",
+            "description": "开仓时间开始"
+          },
+          { "name": "openEnd", "in": "formData", "required": false, "type": "string",
+            "description": "开仓时间结束"
+          },
+          { "name": "sortField", "in": "formData", "required": false, "type": "string",
+            "description": "排序字段"
+          },
+          { "name": "direction", "in": "formData", "required": false, "type": "string",
+            "description": "升降序（desc, asc）"
+          },
+          {
+            "name": "pageNo", "in": "formData","required": false, "type": "int",
+            "description": "页码"
+          },
+          {
+            "name": "pageSize", "in": "formData", "required": false, "type": "int",
+            "description": "每页大小"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/order/profit/group/list": {
+      "get": {
+        "x-swagger-router-controller": "bar",
+        "operationId": "impossible",
+        "tags": ["/order"],
+        "description": "组收益列表",
+        "parameters": [
+          { "name": "groupName", "in": "formData", "required": false, "type": "string",
+            "description": "组名称"
+          },
+          { "name": "openStart", "in": "formData", "required": false, "type": "string",
+            "description": "开仓时间开始"
+          },
+          { "name": "openEnd", "in": "formData", "required": false, "type": "string",
+            "description": "开仓时间结束"
+          },
+          { "name": "sortField", "in": "formData", "required": false, "type": "string",
+            "description": "排序字段"
+          },
+          { "name": "direction", "in": "formData", "required": false, "type": "string",
+            "description": "升降序（desc, asc）"
+          },
+          {
+            "name": "pageNo", "in": "formData","required": false, "type": "int",
+            "description": "页码"
+          },
+          {
+            "name": "pageSize", "in": "formData", "required": false, "type": "int",
+            "description": "每页大小"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/order/profit/group/list": {
+      "get": {
+        "x-swagger-router-controller": "bar",
+        "operationId": "impossible",
+        "tags": ["/order"],
+        "description": "组收益列表",
+        "parameters": [
+          { "name": "groupName", "in": "formData", "required": false, "type": "string",
+            "description": "组名称"
+          },
+          { "name": "openStart", "in": "formData", "required": false, "type": "string",
+            "description": "开仓时间开始"
+          },
+          { "name": "openEnd", "in": "formData", "required": false, "type": "string",
+            "description": "开仓时间结束"
+          },
+          { "name": "sortField", "in": "formData", "required": false, "type": "string",
+            "description": "排序字段"
+          },
+          { "name": "direction", "in": "formData", "required": false, "type": "string",
+            "description": "升降序（desc, asc）"
+          },
+          {
+            "name": "pageNo", "in": "formData","required": false, "type": "int",
+            "description": "页码"
+          },
+          {
+            "name": "pageSize", "in": "formData", "required": false, "type": "int",
+            "description": "每页大小"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/symbol/list": {
+      "get": {
+        "x-swagger-router-controller": "bar",
+        "operationId": "impossible",
+        "tags": ["/symbol"],
+        "description": "品种列表",
+        "parameters": [
+        ],
+        "responses": {}
+      }
+    },
+    "/symbol": {
+      "post": {
+        "x-swagger-router-controller": "bar",
+        "operationId": "impossible",
+        "tags": ["/symbol"],
+        "description": "新增品种",
+        "parameters": [
+          {
+            "name": "symbol",
+            "in": "formData",
+            "required": true,
+            "type": "symbol",
+            "description": "symbol"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/symbol": {
+      "put": {
+        "x-swagger-router-controller": "bar",
+        "operationId": "impossible",
+        "tags": ["/symbol"],
+        "description": "修改品种",
+        "parameters": [
+          {
+            "name": "symbol",
+            "in": "formData",
+            "required": true,
+            "type": "symbol",
+            "description": "symbol"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/symbol": {
+      "get": {
+        "x-swagger-router-controller": "bar",
+        "operationId": "impossible",
+        "tags": ["/symbol"],
+        "description": "品种详情",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "description": "品种id"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/tradedate": {
+      "post": {
+        "x-swagger-router-controller": "bar",
+        "operationId": "impossible",
+        "tags": ["/tradedate"],
+        "description": "交易时间设置",
+        "parameters": [
+          {
+            "name": "tradedate",
+            "in": "formData",
+            "required": true,
+            "type": "tradedate",
+            "description": "交易时间设置"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/tradedate": {
+      "put": {
+        "x-swagger-router-controller": "bar",
+        "operationId": "impossible",
+        "tags": ["/tradedate"],
+        "description": "交易时间设置修改",
+        "parameters": [
+          {
+            "name": "tradedate",
+            "in": "formData",
+            "required": true,
+            "type": "tradedate",
+            "description": "交易时间设置修改"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/tradedate/detail": {
+      "get": {
+        "x-swagger-router-controller": "bar",
+        "operationId": "impossible",
+        "tags": ["/tradedate"],
+        "description": "交易时间设置详情",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "description": "id"
+          }
+        ],
+        "responses": {}
+      }
+    }
+  }
+}
