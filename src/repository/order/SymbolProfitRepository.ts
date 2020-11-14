@@ -35,7 +35,7 @@ export class SymbolProfitRepository {
         const queryBuilder = await repository.createQueryBuilder();
         const countBuilder = await repository.createQueryBuilder();
 
-        queryBuilder.select('symbol');
+        queryBuilder.select('standardSymbol');
         queryBuilder.addSelect('profit');
         queryBuilder.addSelect('loss');
         queryBuilder.addSelect('breakEven');
@@ -44,8 +44,8 @@ export class SymbolProfitRepository {
         countBuilder.select('count(*)', 'count');
 
         if (ValidatorUtils.isNotEmpty(symbol)) {
-            queryBuilder.andWhere('symbol like :symbol', {symbol: symbol+"%"});
-            countBuilder.andWhere('symbol like :symbol', {symbol: symbol+"%"});
+            queryBuilder.andWhere('standardSymbol like :standardSymbol', {standardSymbol: symbol+"%"});
+            countBuilder.andWhere('standardSymbol like :standardSymbol', {standardSymbol: symbol+"%"});
         }
         if (ValidatorUtils.isNotEmpty(openStart)) {
             queryBuilder.andWhere('tradeDate >= :openStart', {openStart: openStart});
@@ -95,8 +95,8 @@ export class SymbolProfitRepository {
         countBuilder.select('count(*)', 'count');
 
         if (ValidatorUtils.isNotEmpty(symbol)) {
-            queryBuilder.andWhere('symbol like :symbol', {symbol: symbol+"%"});
-            countBuilder.andWhere('symbol like :symbol', {symbol: symbol+"%"});
+            queryBuilder.andWhere('standardSymbol like :standardSymbol', {standardSymbol: symbol+"%"});
+            countBuilder.andWhere('standardSymbol like :standardSymbol', {standardSymbol: symbol+"%"});
         }
         if (ValidatorUtils.isNotEmpty(openStart)) {
             queryBuilder.andWhere('tradeDate >= :openStart', {openStart: openStart});
@@ -146,7 +146,7 @@ export class SymbolProfitRepository {
         const queryBuilder = await repository.createQueryBuilder();
         const countBuilder = await repository.createQueryBuilder();
 
-        queryBuilder.select('symbol');
+        queryBuilder.select('standardSymbol');
         countBuilder.select('count(*)', 'count');
 
         queryBuilder.addSelect('sum(tradeCount)',   'totalCount');
@@ -160,8 +160,8 @@ export class SymbolProfitRepository {
             queryBuilder.andWhere('tradeDate <= :tradeDateEnd', {tradeDateEnd: tradeDateEnd});
             countBuilder.andWhere('tradeDate <= :tradeDateEnd', {tradeDateEnd: tradeDateEnd});
         }
-        queryBuilder.groupBy('symbol');
-        countBuilder.groupBy('symbol');
+        queryBuilder.groupBy('standardSymbol');
+        countBuilder.groupBy('standardSymbol');
 
         queryBuilder.addOrderBy("totalCount", "DESC");
 

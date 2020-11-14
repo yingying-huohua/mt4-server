@@ -97,8 +97,8 @@ export class GroupProfitRepository {
         countBuilder.select('count(*)', 'count');
 
         if (ValidatorUtils.isNotEmpty(symbol)) {
-            queryBuilder.andWhere('symbol like :symbol', {symbol: symbol+"%"});
-            countBuilder.andWhere('symbol like :symbol', {symbol: symbol+"%"});
+            queryBuilder.andWhere('standardSymbol like :standardSymbol', {standardSymbol: symbol+"%"});
+            countBuilder.andWhere('standardSymbol like :standardSymbol', {standardSymbol: symbol+"%"});
         }
         if (ValidatorUtils.isNotEmpty(openStart)) {
             queryBuilder.andWhere('tradeDate >= :openStart', {openStart: openStart});

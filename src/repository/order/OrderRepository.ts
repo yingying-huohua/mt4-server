@@ -41,8 +41,8 @@ export class OrderRepository {
             countBuilder.andWhere('userId = :userId', {userId: userId});
         }
         if (ValidatorUtils.isNotEmpty(symbol)) {
-            queryBuilder.andWhere('symbol like :symbol', {symbol: symbol+"%"});
-            countBuilder.andWhere('symbol like :symbol', {symbol: symbol+"%"});
+            queryBuilder.andWhere('standardSymbol like :standardSymbol', {standardSymbol: symbol+"%"});
+            countBuilder.andWhere('standardSymbol like :standardSymbol', {standardSymbol: symbol+"%"});
         }
         if (ValidatorUtils.isNotEmpty(type)) {
             queryBuilder.andWhere('type = :type', {type: type});
@@ -92,8 +92,8 @@ export class OrderRepository {
             countBuilder.andWhere('userId like :userId', {userId: userId+"%"});
         }
         if (ValidatorUtils.isNotEmpty(symbol)) {
-            queryBuilder.andWhere('symbol like :symbol', {symbol: symbol+"%"});
-            countBuilder.andWhere('symbol like :symbol', {symbol: symbol+"%"});
+            queryBuilder.andWhere('standardSymbol like :standardSymbol', {standardSymbol: symbol+"%"});
+            countBuilder.andWhere('standardSymbol like :standardSymbol', {standardSymbol: symbol+"%"});
         }
         if (ValidatorUtils.isNotEmpty(type)) {
             queryBuilder.andWhere('type = :type', {type: type});

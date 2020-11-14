@@ -32,7 +32,7 @@ export class SymbolMetaRepository {
         const queryBuilder = connection
             .getRepository(SymbolMeta)
             .createQueryBuilder('symbolMeta')
-            .where('symbol = :symbol', {symbol: symbol});
+            .where('standardSymbol = :standardSymbol', {standardSymbol: symbol});
         return await queryBuilder.getOne();
     }
 
@@ -56,7 +56,7 @@ export class SymbolMetaRepository {
         const result = await queryBuilder.getRawMany();
 
         let totalResult = {
-            symbol: result[0].symbol,
+            standardSymbol: result[0].standardSymbol,
             totalProfit: result[0].totalProfit,
             userCount: result[0].totalUser,
             profitUserCount: result[0].totalProfitUserCount,

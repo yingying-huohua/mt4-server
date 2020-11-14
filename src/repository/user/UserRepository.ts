@@ -41,8 +41,8 @@ export class UserRepository {
             countBuilder.andWhere('accountId like :accountId', {accountId: accountId+"%"});
         }
         if (ValidatorUtils.isNotEmpty(symbol)) {
-            queryBuilder.andWhere('symbol like :symbol', {symbol: "%"+symbol+"%"});
-            countBuilder.andWhere('symbol like :symbol', {symbol: "%"+symbol+"%"});
+            queryBuilder.andWhere('standardSymbol like :standardSymbol', {standardSymbol: "%"+symbol+"%"});
+            countBuilder.andWhere('standardSymbol like :standardSymbol', {standardSymbol: "%"+symbol+"%"});
         }
         pageNo   = PageNoAndPageSizeUtils.getCurrentPageNo(pageNo);
         pageSize = PageNoAndPageSizeUtils.getPageSize(pageSize);

@@ -18,8 +18,8 @@ const router = Express.Router();
 
 // 总盈亏
 const getSymbolMeta = async (req: Request, res: Response) => {
-    const symbol        = req.query.symbol;
-    const result    = await SymbolMetaRepository.getInstance().get(symbol);
+    const standardSymbol        = req.query.standardSymbol;
+    const result    = await SymbolMetaRepository.getInstance().get(standardSymbol);
     res.send(result);
 };
 // TODO 趋势

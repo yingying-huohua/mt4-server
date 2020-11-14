@@ -41,7 +41,7 @@ export class UserProfitItemRepository {
 
         queryBuilder.addSelect('userId');
         if (ValidatorUtils.isNotEmpty(symbol)) {
-            queryBuilder.addSelect('symbol');
+            queryBuilder.addSelect('standardSymbol');
         }
         queryBuilder.addSelect('sum(profit)',   'totalProfit');
         if (ValidatorUtils.isNotEmpty(accountId)) {
@@ -49,8 +49,8 @@ export class UserProfitItemRepository {
             countBuilder.andWhere('accountId like :accountId', {accountId: accountId+"%"});
         }
         if (ValidatorUtils.isNotEmpty(symbol)) {
-            queryBuilder.andWhere('symbol like :symbol', {symbol: symbol+"%"});
-            countBuilder.andWhere('symbol like :symbol', {symbol: symbol+"%"});
+            queryBuilder.andWhere('standardSymbol like :symbol', {symbol: symbol+"%"});
+            countBuilder.andWhere('standardSymbol like :symbol', {symbol: symbol+"%"});
         }
         if (ValidatorUtils.isNotEmpty(openStart)) {
             queryBuilder.andWhere('tradeDate >= :openStart', {openStart: openStart});
@@ -73,8 +73,8 @@ export class UserProfitItemRepository {
             countBuilder.andWhere('type = :type', {type: type});
         }
         if (ValidatorUtils.isNotEmpty(symbol)) {
-           queryBuilder.groupBy('accountId, symbol');
-           countBuilder.groupBy('accountId, symbol');
+           queryBuilder.groupBy('accountId, standardSymbol');
+           countBuilder.groupBy('accountId, standardSymbol');
         }else{
            queryBuilder.groupBy('accountId');
            countBuilder.groupBy('accountId');
@@ -121,8 +121,8 @@ export class UserProfitItemRepository {
             countBuilder.andWhere('accountId like :accountId', {accountId: accountId+"%"});
         }
         if (ValidatorUtils.isNotEmpty(symbol)) {
-            queryBuilder.andWhere('symbol like :symbol', {symbol: symbol+"%"});
-            countBuilder.andWhere('symbol like :symbol', {symbol: symbol+"%"});
+            queryBuilder.andWhere('standardSymbol like :standardSymbol', {standardSymbol: symbol+"%"});
+            countBuilder.andWhere('standardSymbol like :standardSymbol', {standardSymbol: symbol+"%"});
         }
         if (ValidatorUtils.isNotEmpty(openStart)) {
             queryBuilder.andWhere('tradeDate >= :openStart', {openStart: openStart});
@@ -184,15 +184,15 @@ export class UserProfitItemRepository {
         const queryBuilder = await repository.createQueryBuilder();
         const countBuilder = await repository.createQueryBuilder();
 
-        queryBuilder.select('symbol');
+        queryBuilder.select('standardSymbol');
         countBuilder.select('count(*)', 'count');
 
         queryBuilder.addSelect('accountId');
         queryBuilder.addSelect('sum(lots*closePrice)', 'totalTradeMount');
 
         if (ValidatorUtils.isNotEmpty(symbol)) {
-            queryBuilder.andWhere('symbol = :symbol', {symbol: symbol});
-            countBuilder.andWhere('symbol = :symbol', {symbol: symbol});
+            queryBuilder.andWhere('standardSymbol = :standardSymbol', {standardSymbol: symbol});
+            countBuilder.andWhere('standardSymbol = :standardSymbol', {standardSymbol: symbol});
         }
         if (ValidatorUtils.isNotEmpty(openStart)) {
             queryBuilder.andWhere('tradeDate >= :openStart', {openStart: openStart});

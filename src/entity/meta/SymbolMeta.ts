@@ -14,7 +14,7 @@ export class SymbolMeta {
 
     // 品种
     @Column({length:20})
-    symbol: string;
+    standardSymbol: string;
 
     // 品种总人数
     @Column()

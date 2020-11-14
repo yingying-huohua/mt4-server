@@ -22,10 +22,6 @@ export class UserProfitItem {
     @Column()
     standardSymbol: string;
 
-    // 品种
-    @Column()
-    standardSymbol: string;
-
     // 盈亏
     @Column()
     profit: string;

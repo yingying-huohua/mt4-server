@@ -41,8 +41,8 @@ export class UserProfitTotalRepository {
         queryBuilder.addSelect('profit');
 
         if (ValidatorUtils.isNotEmpty(symbol)) {
-            queryBuilder.andWhere('symbol = :symbol', {symbol: symbol});
-            countBuilder.andWhere('symbol = :symbol', {symbol: symbol});
+            queryBuilder.andWhere('standardSymbol = :standardSymbol', {standardSymbol: symbol});
+            countBuilder.andWhere('standardSymbol = :standardSymbol', {standardSymbol: symbol});
         }
         if (ValidatorUtils.isNotEmpty(accountId)) {
             queryBuilder.andWhere('accountId like :accountId', {accountId: accountId+"%"});

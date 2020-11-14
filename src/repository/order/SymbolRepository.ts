@@ -37,13 +37,15 @@ export class SymbolRepository {
         countBuilder.where('1=1');
 
         if (ValidatorUtils.isNotEmpty(symbol)) {
-            queryBuilder.andWhere('symbol like :symbol', {symbol: symbol+"%"});
-            countBuilder.andWhere('symbol like :symbol', {symbol: symbol+"%"});
+            queryBuilder.andWhere('standardSymbol like :standardSymbol', {standardSymbol: symbol+"%"});
+            countBuilder.andWhere('standardSymbol like :standardSymbol', {standardSymbol: symbol+"%"});
         }
         if (ValidatorUtils.isNotEmpty(type)) {
             queryBuilder.andWhere('type = :type', {type: type});
             countBuilder.andWhere('type = :type', {type: type});
         }
+        queryBuilder.groupBy('standardSymbol');
+        countBuilder.groupBy('standardSymbol');
 
         pageNo   = PageNoAndPageSizeUtils.getCurrentPageNo(pageNo);
         pageSize = PageNoAndPageSizeUtils.getPageSize(pageSize);

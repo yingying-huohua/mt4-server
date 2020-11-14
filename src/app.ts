@@ -97,49 +97,49 @@ console.log('**********' + `${environment.environment}初始化完成` + '******
 
 console.log('********** scheduleJob start **************');
 
-// step 1: 用户收益汇总
-schedule.scheduleJob('*/30 * * * * ?', function () {
-    new UserProfitTask().doTask();
-});
-
-// 用户总收益汇总
-schedule.scheduleJob('*/20 * * * * ?', function () {
-    new UserProfitTotalTask().doTask();
-});
-
-// 用户组收益汇总
-schedule.scheduleJob('*/20 * * * * ?', function () {
-    new GroupProfitTask().doTask();
-});
-
-// 用户活跃度统计汇总
-schedule.scheduleJob('*/20 * * * * ?', function () {
-    new UserActiveTask().doTask();
-});
-
-// 品种收益汇总
-schedule.scheduleJob('*/20 * * * * ?', function () {
-    new SymbolProfitTask().doTask();
-});
-
-// 品种meta信息统计
-schedule.scheduleJob('*/20 * * * * ?', function () {
-    new SymbolMetaTask().doTask();
-});
-
-// 品种meta信息更新
-schedule.scheduleJob('0 */1 * * * ?', function () {
-    new SymbolMetaTask().doTask();
-});
-
-// 增量导入用户
-schedule.scheduleJob('*/20 * * * * ?', function () {
-    new DeltaImportUserTask().doTask();
-});
-
-// 增量导入品种
-schedule.scheduleJob('*/20 * * * * ?', function () {
-    new DeltaImportSymbolTask().doTask();
-});
+// // step 1: 用户收益汇总
+// schedule.scheduleJob('*/30 * * * * ?', function () {
+//     new UserProfitTask().doTask();
+// });
+//
+// // 用户总收益汇总
+// schedule.scheduleJob('*/20 * * * * ?', function () {
+//     new UserProfitTotalTask().doTask();
+// });
+//
+// // 用户组收益汇总
+// schedule.scheduleJob('*/20 * * * * ?', function () {
+//     new GroupProfitTask().doTask();
+// });
+//
+// // 用户活跃度统计汇总
+// schedule.scheduleJob('*/20 * * * * ?', function () {
+//     new UserActiveTask().doTask();
+// });
+//
+// // 品种收益汇总
+// schedule.scheduleJob('*/20 * * * * ?', function () {
+//     new SymbolProfitTask().doTask();
+// });
+//
+// // 品种meta信息统计
+// schedule.scheduleJob('*/20 * * * * ?', function () {
+//     new SymbolMetaTask().doTask();
+// });
+//
+// // 品种meta信息更新
+// schedule.scheduleJob('0 */1 * * * ?', function () {
+//     new SymbolMetaTask().doTask();
+// });
+//
+// // 增量导入用户
+// schedule.scheduleJob('*/20 * * * * ?', function () {
+//     new DeltaImportUserTask().doTask();
+// });
+//
+// // 增量导入品种
+// schedule.scheduleJob('*/20 * * * * ?', function () {
+//     new DeltaImportSymbolTask().doTask();
+// });
 
 export = app;
