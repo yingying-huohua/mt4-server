@@ -24,7 +24,7 @@ export class UserProfitTotal {
 
     // 品种
     @Column()
-    symbol: string;
+    standardSymbol: string;
 
     // 类型
     @Column()

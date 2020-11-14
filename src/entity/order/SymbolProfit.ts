@@ -12,7 +12,7 @@ export class SymbolProfit {
 
     // 品种
     @Column()
-    symbol: string;
+    standardSymbol: string;
 
     // 收益
     @Column()

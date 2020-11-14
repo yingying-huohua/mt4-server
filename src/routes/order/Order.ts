@@ -60,7 +60,7 @@ const listProfit = async (req: Request, res: Response) => {
     const pageNo             = req.query.pageNo || 1;
     const pageSize           = req.query.pageSize || Constant.DEFAULT_PAGE_SIZE;
     const accountId          = req.query.accountId;          // 账号
-    const symbol             = req.query.symbol;             // 品种
+    const standardSymbol     = req.query.standardSymbol;     // 品种
     const openStart          = req.query.openStart;          // 开仓时间
     const openEnd            = req.query.openEnd;            // 平仓时间
     const minReturn          = req.query.minReturn;          // 收益率
@@ -69,7 +69,7 @@ const listProfit = async (req: Request, res: Response) => {
     const sort               = req.query.sortField;          // 排序字段
     const direction          = req.query.direction;          // 升降序
 
-    const result       = await UserProfitItemRepository.getInstance().listProfit(accountId, symbol, openStart, openEnd, minReturn, maxReturn, type, sort, direction, pageNo, pageSize)
+    const result       = await UserProfitItemRepository.getInstance().listProfit(accountId, standardSymbol, openStart, openEnd, minReturn, maxReturn, type, sort, direction, pageNo, pageSize)
 
     res.send(result);
 };
@@ -79,7 +79,7 @@ const listUserProfit = async (req: Request, res: Response) => {
     const pageNo             = req.query.pageNo || 1;
     const pageSize           = req.query.pageSize || Constant.DEFAULT_PAGE_SIZE;
     const accountId          = req.query.accountId;          // 账号
-    const symbol             = req.query.symbol;             // 品种
+    const standardSymbol     = req.query.standardSymbol;     // 品种
     const openStart          = req.query.openStart;          // 开仓时间
     const openEnd            = req.query.openEnd;            // 平仓时间
     const type               = req.query.type;               // 类型：外汇 期货
@@ -87,7 +87,7 @@ const listUserProfit = async (req: Request, res: Response) => {
     const direction          = req.query.direction;          // 升降序
     const returnType         = null;                         // 收益类型： 1： 盈利， 2亏损， 3：持平
 
-    const result       = await UserProfitItemRepository.getInstance().listProfitDetail(accountId, symbol, openStart, openEnd, returnType , type, sort, direction, pageNo, pageSize)
+    const result       = await UserProfitItemRepository.getInstance().listProfitDetail(accountId, standardSymbol, openStart, openEnd, returnType , type, sort, direction, pageNo, pageSize)
 
     res.send(result);
 };
@@ -112,14 +112,14 @@ const listGroupProfit = async (req: Request, res: Response) => {
 const listSymbolProfit = async (req: Request, res: Response) => {
     const pageNo       = req.query.pageNo || 1;
     const pageSize     = req.query.pageSize || Constant.DEFAULT_PAGE_SIZE;
-    const symbol       = req.query.symbol;         // 品种
+    const standardSymbol = req.query.standardSymbol;         // 品种
     const openStart    = req.query.openStart;      // 开仓时间
     const openEnd      = req.query.openEnd;        // 平仓时间
     const type         = req.query.type;           // 类型：外汇 期货
     const sort         = req.query.sortField;      // 排序字段
     const direction    = req.query.direction;      // 升降序
 
-    const result       = await SymbolProfitRepository.getInstance().listProfit(symbol, openStart, openEnd, type, sort, direction, pageNo, pageSize)
+    const result       = await SymbolProfitRepository.getInstance().listProfit(standardSymbol, openStart, openEnd, type, sort, direction, pageNo, pageSize)
 
     res.send(result);
 };
@@ -128,7 +128,7 @@ const listSymbolProfit = async (req: Request, res: Response) => {
 const listSymbolProfitUser = async (req: Request, res: Response) => {
     const pageNo       = req.query.pageNo || 1;
     const pageSize     = req.query.pageSize || Constant.DEFAULT_PAGE_SIZE;
-    const symbol       = req.query.symbol;         // 品种
+    const standardSymbol  = req.query.standardSymbol;         // 品种
     const returnType   = req.query.returnType;     // 收益类型： 1：盈利用户，2：亏损用户， 3：持平用户
     const type         = req.query.type;           // 类型：外汇 期货
     const openStart    = req.query.openStart;      // 开仓时间
@@ -136,7 +136,7 @@ const listSymbolProfitUser = async (req: Request, res: Response) => {
     const sort         = req.query.sortField;      // 排序字段
     const direction    = req.query.direction;      // 升降序
 
-    const result       = await UserProfitItemRepository.getInstance().listProfitDetail(null, symbol, openStart, openEnd, returnType, type, sort, direction, pageNo, pageSize)
+    const result       = await UserProfitItemRepository.getInstance().listProfitDetail(null, standardSymbol, openStart, openEnd, returnType, type, sort, direction, pageNo, pageSize)
 
     res.send(result);
 };

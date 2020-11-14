@@ -5,7 +5,7 @@ DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `clean_all_data`()
 BEGIN
 --    TRUNCATE TABLE `user`;
---    TRUNCATE TABLE `symbol`;
+--    TRUNCATE TABLE `standardSymbol`;
 --    TRUNCATE TABLE `groups`;
 --    TRUNCATE TABLE `user_group`;
 	TRUNCATE TABLE user_profit_item;
@@ -27,11 +27,11 @@ DROP PROCEDURE IF EXISTS `update_user_profit`;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `update_user_profit`(tradeStart VARCHAR(10), tradeEnd VARCHAR(10), type VARCHAR(10))
 begin
-  INSERT INTO user_profit_item (userId, accountId, symbol, standardSymbol, profit, tradeCount, tradedate, type)
-	SELECT userId, accountId, symbol, standardSymbol, sum(profit+commission+swap) as netProfit, count(*) as tradeCount, DATE_FORMAT(openTime,'%Y-%m-%d') as tradedate, '外汇'
+  INSERT INTO user_profit_item (userId, accountId, standardSymbol,  profit, tradeCount, tradedate, type)
+	SELECT userId, accountId, standardSymbol,  sum(profit+commission+swap) as netProfit, count(*) as tradeCount, DATE_FORMAT(openTime,'%Y-%m-%d') as tradedate, '外汇'
 	   from user_order
 		where DATE_FORMAT(openTime,'%Y-%m-%d') > tradeStart and DATE_FORMAT(openTime,'%Y-%m-%d') <= tradeEnd AND `type` = type
-		GROUP BY accountId, symbol, DATE_FORMAT(openTime,'%Y-%m-%d');
+		GROUP BY accountId, standardSymbol, DATE_FORMAT(openTime,'%Y-%m-%d');
 end
 ;;
 DELIMITER ;
@@ -42,31 +42,31 @@ DROP PROCEDURE IF EXISTS `update_symbol_profit`;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `update_symbol_profit`(tradeStart VARCHAR(10), tradeEnd VARCHAR(10), type VARCHAR(10))
 begin
-  INSERT INTO symbol_profit (symbol, tradedate, profit, loss, breakEven, userCount, tradeCount, tradeMoney, type)
+  INSERT INTO symbol_profit (standardSymbol, tradedate, profit, loss, breakEven, userCount, tradeCount, tradeMoney, type)
 
-	SELECT total.symbol, total.tradeDate,
+	SELECT total.standardSymbol, total.tradeDate,
 	       profit.profitCount/total.totalCount as profitRate,  loss.lossCount/total.totalCount as lossRate ,  breakEven.breakEvenCount/total.totalCount as breakEvenRate ,
 	       0, total.totalCount, total.tradeMoney, '外汇'
 	from
-	  (SELECT symbol, tradeDate, count(*) as totalCount, sum(profit) as tradeMoney
+	  (SELECT standardSymbol, tradeDate, count(*) as totalCount, sum(profit) as tradeMoney
 		from user_profit_item
 	    where `tradeDate` > tradeStart and `tradeDate` <= tradeEnd AND `type` = type
-		GROUP BY symbol, tradeDate) as total
+		GROUP BY standardSymbol, tradeDate) as total
 	  LEFT JOIN
-	  (SELECT symbol, tradeDate, count(*) as profitCount
+	  (SELECT standardSymbol, tradeDate, count(*) as profitCount
 		from user_profit_item
 	      where profit > 0  and  `tradeDate` > tradeStart and `tradeDate` <= tradeEnd AND `type` = type
-		  GROUP BY symbol, tradeDate) as profit ON total.symbol = profit.symbol and total.tradeDate = profit.tradeDate
+		  GROUP BY standardSymbol, tradeDate) as profit ON total.standardSymbol = profit.standardSymbol and total.tradeDate = profit.tradeDate
 	   LEFT JOIN
-	  (SELECT symbol, tradeDate, count(*) as lossCount
+	  (SELECT standardSymbol, tradeDate, count(*) as lossCount
 		from user_profit_item
 	      where profit < 0  and `tradeDate` > tradeStart and `tradeDate` <= tradeEnd AND `type` = type
-		  GROUP BY symbol, tradeDate) as loss ON total.symbol = loss.symbol and total.tradeDate = loss.tradeDate
+		  GROUP BY standardSymbol, tradeDate) as loss ON total.standardSymbol = loss.standardSymbol and total.tradeDate = loss.tradeDate
 	  LEFT JOIN
-	 (SELECT symbol, tradeDate, count(*) as breakEvenCount
+	 (SELECT standardSymbol, tradeDate, count(*) as breakEvenCount
 		from user_profit_item
 	      where profit = 0  and  `tradeDate` > tradeStart and `tradeDate` <= tradeEnd AND `type` = type
-		  GROUP BY symbol, tradeDate) as breakEven ON total.symbol = breakEven.symbol and total.tradeDate = breakEven.tradeDate;
+		  GROUP BY standardSymbol, tradeDate) as breakEven ON total.standardSymbol = breakEven.standardSymbol and total.tradeDate = breakEven.tradeDate;
 end
 ;;
 DELIMITER ;
@@ -97,10 +97,10 @@ DROP PROCEDURE IF EXISTS `update_user_active`;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `update_user_active`(tradeStart VARCHAR(10), tradeEnd VARCHAR(10), type VARCHAR(10))
 begin
-  INSERT INTO user_active(userId, accountId, tradeCount, tradeDate,  symbol, type)
-	SELECT userId, accountId, SUM(tradeCount) as activity, tradeDate, symbol, type from user_profit_item
+  INSERT INTO user_active(userId, accountId, tradeCount, tradeDate,  standardSymbol, type)
+	SELECT userId, accountId, SUM(tradeCount) as activity, tradeDate, standardSymbol, type from user_profit_item
        WHERE `tradeDate` > tradeStart and `tradeDate` <= tradeEnd  AND `type` = type
-	   GROUP BY accountId, tradeDate, symbol;
+	   GROUP BY accountId, tradeDate, standardSymbol;
 end
 ;;
 DELIMITER ;
@@ -112,8 +112,8 @@ DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `update_user_profit_total`(tradeStart VARCHAR(10), tradeEnd VARCHAR(10))
 begin
   UPDATE user_profit_total t1
-	INNER JOIN (select accountId, symbol, sum(profit) as totalProfit, '外汇' from user_profit_item WHERE `tradeDate` > tradeStart and `tradeDate` <= tradeEnd GROUP BY accountId, symbol) t2
-     ON t1.accountId = t2.accountId and t1.symbol = t2.symbol
+	INNER JOIN (select accountId, standardSymbol, sum(profit) as totalProfit, '外汇' from user_profit_item WHERE `tradeDate` > tradeStart and `tradeDate` <= tradeEnd GROUP BY accountId, standardSymbol) t2
+     ON t1.accountId = t2.accountId and t1.standardSymbol = t2.standardSymbol
   SET t1.profit = t1.profit + t2.totalProfit;
 end
 ;;
@@ -128,29 +128,29 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `update_symbol_meta`(tradeStart VARC
 begin
   UPDATE symbol_meta t1
 	INNER JOIN
-	(SELECT total.symbol,  total.totalProfit,
+	(SELECT total.standardSymbol,  total.totalProfit,
 					 profit.profitCount/total.totalCount as profitRate,  loss.lossCount/total.totalCount as lossRate ,  breakEven.breakEvenCount/total.totalCount as breakEvenRate,
 				 profit.profitMoney, loss.lossMoney, total.userCount
 		from
-			(SELECT symbol, count(*) as totalCount, SUM(profit) as totalProfit, COUNT(DISTINCT accountId, symbol) as userCount
+			(SELECT standardSymbol, count(*) as totalCount, SUM(profit) as totalProfit, COUNT(DISTINCT accountId, standardSymbol) as userCount
 			from user_profit_item
 				where `tradeDate` > tradeStart and `tradeDate` <= tradeEnd
-			GROUP BY symbol) as total
+			GROUP BY standardSymbol) as total
 			LEFT JOIN
-			(SELECT symbol, count(*) as profitCount, SUM(profit) as profitMoney
+			(SELECT standardSymbol, count(*) as profitCount, SUM(profit) as profitMoney
 			from user_profit_item
 					where profit > 0  and  `tradeDate` > tradeStart and `tradeDate` <= tradeEnd
-				GROUP BY symbol) as profit ON total.symbol = profit.symbol
+				GROUP BY standardSymbol) as profit ON total.standardSymbol = profit.standardSymbol
 			 LEFT JOIN
-			(SELECT symbol, count(*) as lossCount, SUM(profit) as lossMoney
+			(SELECT standardSymbol, count(*) as lossCount, SUM(profit) as lossMoney
 			from user_profit_item
 					where profit < 0  and `tradeDate` > tradeStart and `tradeDate` <= tradeEnd
-				GROUP BY symbol) as loss ON total.symbol = loss.symbol
+				GROUP BY standardSymbol) as loss ON total.standardSymbol = loss.standardSymbol
 			LEFT JOIN
-		 (SELECT symbol, count(*) as breakEvenCount
+		 (SELECT standardSymbol, count(*) as breakEvenCount
 			from user_profit_item
 					where profit = 0  and  `tradeDate` > tradeStart and `tradeDate` <= tradeEnd
-				GROUP BY symbol) as breakEven ON total.symbol = breakEven.symbol) t2 on t1.symbol = t2.symbol
+				GROUP BY standardSymbol) as breakEven ON total.standardSymbol = breakEven.standardSymbol) t2 on t1.standardSymbol = t2.standardSymbol
   SET t1.`totalProfit` = t1.`totalProfit`+ t2.totalProfit, t1.`profitRate`=t2.profitRate, t1.`lossRate` = t2.lossRate, t1.`breakEvenRate`=t2.breakEvenRate,
 	  t1.`profitMoney`=t2.profitMoney, t1.`lossMoney`=t2.lossMoney, t1.`userCount` = t2.userCount;
 end
@@ -165,7 +165,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `update_symbol_meta_user_count`()
 BEGIN
 DECLARE symbolParam VARCHAR(20);
 DECLARE fetchSeqOk BOOLEAN;
-DECLARE symbol_cur CURSOR FOR SELECT s.symbol FROM symbol_meta s;
+DECLARE symbol_cur CURSOR FOR SELECT s.standardSymbol FROM symbol_meta s;
 DECLARE CONTINUE HANDLER FOR NOT FOUND SET fetchSeqOk = true;
 SET fetchSeqOk = FALSE;
 OPEN symbol_cur;
@@ -177,15 +177,15 @@ symbol_cur:LOOP
       -- 更新symbol 用户数信息
       -- 盈利用户数
       UPDATE symbol_meta t1
-			INNER JOIN (SELECT symbolParam as symbol , count(*) as profitUserCount from (SELECT accountId, sum(profit) as userProfit from user_profit_item where  symbol = symbolParam group by accountId HAVING userProfit > 0) t2 ) t3 on t1.symbol = t3.symbol
+			INNER JOIN (SELECT symbolParam as standardSymbol , count(*) as profitUserCount from (SELECT accountId, sum(profit) as userProfit from user_profit_item where  standardSymbol = symbolParam group by accountId HAVING userProfit > 0) t2 ) t3 on t1.standardSymbol = t3.standardSymbol
 	  SET t1.profitUserCount = t3.profitUserCount;
       -- 亏损用户数
       UPDATE symbol_meta t1
-            INNER JOIN (SELECT symbolParam as symbol , count(*) as profitUserCount from (SELECT accountId, sum(profit) as userProfit from user_profit_item where  symbol = symbolParam group by accountId HAVING userProfit < 0) t2 ) t3 on t1.symbol = t3.symbol
+            INNER JOIN (SELECT symbolParam as standardSymbol , count(*) as profitUserCount from (SELECT accountId, sum(profit) as userProfit from user_profit_item where  standardSymbol = symbolParam group by accountId HAVING userProfit < 0) t2 ) t3 on t1.standardSymbol = t3.standardSymbol
       SET t1.lossUserCount = t3.profitUserCount;
       -- 持平用户数
       UPDATE symbol_meta t1
-            INNER JOIN (SELECT symbolParam as symbol , count(*) as profitUserCount from (SELECT accountId, sum(profit) as userProfit from user_profit_item where  symbol = symbolParam group by accountId HAVING userProfit = 0) t2 ) t3 on t1.symbol = t3.symbol
+            INNER JOIN (SELECT symbolParam as standardSymbol , count(*) as profitUserCount from (SELECT accountId, sum(profit) as userProfit from user_profit_item where  standardSymbol = symbolParam group by accountId HAVING userProfit = 0) t2 ) t3 on t1.standardSymbol = t3.standardSymbol
       SET t1.breakEvenUserCount = t3.profitUserCount;
     END IF;
 END LOOP;
@@ -199,14 +199,14 @@ DROP PROCEDURE IF EXISTS `delta_import_symbol`;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `delta_import_symbol`(tradeStart VARCHAR(10), tradeEnd VARCHAR(10))
 begin
-  INSERT into symbol_delta (symbol, standardSymbol)
-	SELECT symbol, standardSymbol from user_order WHERE DATE_FORMAT(openTime,'%Y-%m-%d') > tradeStart and DATE_FORMAT(openTime,'%Y-%m-%d') <= tradeEnd GROUP BY symbol;
+  INSERT into symbol_delta (standardSymbol, standardSymbol)
+	SELECT standardSymbol, standardSymbol from user_order WHERE DATE_FORMAT(openTime,'%Y-%m-%d') > tradeStart and DATE_FORMAT(openTime,'%Y-%m-%d') <= tradeEnd GROUP BY standardSymbol;
 
-	INSERT INTO symbol(symbol, standardSymbol, type)
-	SELECT symbol, standardSymbol, '外汇' from symbol_delta where symbol NOT IN (SELECT symbol from symbol);
+	INSERT INTO standardSymbol(standardSymbol,  type)
+	SELECT standardSymbol,  '外汇' from symbol_delta where standardSymbol NOT IN (SELECT standardSymbol from standardSymbol);
 
-    INSERT INTO symbol_meta (`name`, `symbol`, `userCount`, `totalProfit`, `profitRate`, `lossRate`, `breakEvenRate`, `profitUserCount`, `lossUserCount`, `breakEvenUserCount`, `profitMoney`, `lossMoney`)
-    SELECT `name`, symbol, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 from symbol_delta where symbol NOT IN (SELECT symbol from symbol);
+    INSERT INTO symbol_meta (`name`, `standardSymbol`, `userCount`, `totalProfit`, `profitRate`, `lossRate`, `breakEvenRate`, `profitUserCount`, `lossUserCount`, `breakEvenUserCount`, `profitMoney`, `lossMoney`)
+    SELECT `name`, standardSymbol, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 from symbol_delta where standardSymbol NOT IN (SELECT standardSymbol from standardSymbol);
 
 	TRUNCATE table symbol_delta;
 end
@@ -218,12 +218,12 @@ DROP PROCEDURE IF EXISTS `delta_import_user`;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `delta_import_user`(tradeStart VARCHAR(10), tradeEnd VARCHAR(10))
 begin
-	INSERT into user_delta (userId, accountId, symbol, standardSymbol)
-       SELECT userId, accountId, GROUP_CONCAT(DISTINCT symbol) as sb, GROUP_CONCAT(DISTINCT standardSymbol) as sdsb from user_order
+	INSERT into user_delta (userId, accountId, standardSymbol, standardSymbol)
+       SELECT userId, accountId, GROUP_CONCAT(DISTINCT standardSymbol) as sb, GROUP_CONCAT(DISTINCT standardSymbol) as sdsb from user_order
        WHERE DATE_FORMAT(openTime,'%Y-%m-%d') > tradeStart and DATE_FORMAT(openTime,'%Y-%m-%d') <= tradeEnd GROUP BY accountId;
 
-	INSERT INTO `User`(userId, accountId, symbol, standardSymbol)
-	   SELECT userId, accountId, standardSymbol, '外汇' from user_delta where userId NOT IN (SELECT userId from user_order);
+	INSERT INTO `User`(userId, accountId, standardSymbol, standardSymbol)
+	   SELECT userId, accountId,  '外汇' from user_delta where userId NOT IN (SELECT userId from user_order);
 
 	INSERT INTO user_profit_total(userId, accountId, profit)
 	   SELECT userId, accountId, 0 from user_delta where userId NOT IN (SELECT userId from user_order);

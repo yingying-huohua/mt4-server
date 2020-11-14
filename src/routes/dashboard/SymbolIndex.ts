@@ -43,12 +43,12 @@ const listUserAmount = async (req: Request, res: Response) => {
     const pageSize           = req.query.pageSize || Constant.DEFAULT_PAGE_SIZE;
     const tradeStart         = req.query.tradeStart;          // 交易开始
     const tradeEnd           = req.query.tradeEnd;            // 交易结束
-    const symbol             = req.query.symbol;              // 品种
+    const standardSymbol     = req.query.standardSymbol;      // 品种
     const type               = req.query.type;                // 类型：外汇 期货
     const sort               = req.query.sortField;           // 排序字段
     const direction          = req.query.direction;           // 升降序
 
-    const result       = await UserProfitItemRepository.getInstance().listSymbolAmount(symbol, tradeStart, tradeEnd, type, sort, direction, pageNo, pageSize);
+    const result       = await UserProfitItemRepository.getInstance().listSymbolAmount(standardSymbol, tradeStart, tradeEnd, type, sort, direction, pageNo, pageSize);
 
     res.send(result);
 };
@@ -60,9 +60,9 @@ const listUserTotalProfit = async (req: Request, res: Response) => {
     const accountId          = req.query.accountId;          // 账号
     const sort               = req.query.sortField;          // 排序字段
     const direction          = req.query.direction;          // 升降序
-    const symbol             = req.query.symbol;             // 品种
+    const standardSymbol     = req.query.standardSymbol;     // 品种
 
-    const result       = await UserProfitTotalRepository.getInstance().listProfit(symbol, accountId, sort, direction, pageNo, pageSize)
+    const result       = await UserProfitTotalRepository.getInstance().listProfit(standardSymbol, accountId, sort, direction, pageNo, pageSize)
 
     res.send(result);
 };

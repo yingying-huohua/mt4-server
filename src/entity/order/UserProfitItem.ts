@@ -20,7 +20,7 @@ export class UserProfitItem {
 
     // 品种
     @Column()
-    symbol: string;
+    standardSymbol: string;
 
     // 品种
     @Column()

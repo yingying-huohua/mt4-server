@@ -17,9 +17,9 @@ export class Group {
     @PrimaryColumn()
     abbr: string;
 
-    // 品种代号（逗号分隔）
-    @Column({length:100})
-    symbol: string;
+    // // 品种代号（逗号分隔）
+    // @Column({length:100})
+    // symbol: string;
 
     // 品种代号（逗号分隔）
     @Column({length:100})

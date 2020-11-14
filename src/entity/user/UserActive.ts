@@ -28,7 +28,7 @@ export class UserActive {
 
     // 品种
     @Column()
-    symbol: string;
+    standardSymbol: string;
 
     // 外汇 期货
     @Column()

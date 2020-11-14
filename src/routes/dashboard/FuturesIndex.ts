@@ -26,7 +26,7 @@ const listActive = async (req: Request, res: Response) => {
     const pageSize           = req.query.pageSize || Constant.DEFAULT_PAGE_SIZE;
     const tradeStart         = req.query.tradeStart;          // 交易开始
     const tradeEnd           = req.query.tradeEnd;            // 交易结束
-    const symbol             = req.query.symbol;              // 品种
+    const standardSymbol     = req.query.standardSymbol;      // 品种
 
     // const result       = await UserActiveRepository.getInstance().listActive(symbol, tradeStart, tradeEnd, pageNo, pageSize)
     res.send({});
@@ -39,7 +39,7 @@ const listSymbolActive = async (req: Request, res: Response) => {
     const tradeStart         = req.query.tradeStart;          // 交易开始
     const tradeEnd           = req.query.tradeEnd;            // 交易结束
 
-    // // const result       = await UserActiveRepository.getInstance().listSymbolActive(tradeStart, tradeEnd, pageNo, pageSize)
+    // const result       = await UserActiveRepository.getInstance().listSymbolActive(tradeStart, tradeEnd, pageNo, pageSize)
     // const result       = await SymbolProfitRepository.getInstance().listSymbolActive(tradeStart, tradeEnd, pageNo, pageSize)
 
     res.send({});
@@ -52,7 +52,7 @@ const listUserTotalProfit = async (req: Request, res: Response) => {
     const accountId          = req.query.accountId;          // 账号
     const sort               = req.query.sortField;          // 排序字段
     const direction          = req.query.direction;          // 升降序
-    const symbol             = req.query.symbol;             // 品种
+    const standardSymbol     = req.query.standardSymbol;     // 品种
 
     // const result       = await UserProfitTotalRepository.getInstance().listProfit(accountId, sort, direction, pageNo, pageSize)
 

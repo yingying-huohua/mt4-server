@@ -34,22 +34,18 @@ CREATE TABLE `symbol_delta` (
 CREATE TABLE `user` (
   `userId` int(11) NOT NULL COMMENT '用户id',
   `accountId` int(11) DEFAULT NULL COMMENT '账号id',
-  `symbol` varchar(500) DEFAULT NULL COMMENT '品种',
-  `standardSymbol` varchar(500) DEFAULT NULL COMMENT '品种',
   PRIMARY KEY (`userId`),
   KEY `idx_user_accountId` (`accountId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 初始化user：订单表中所有用户
-INSERT into `user` (userId, accountId, symbol, standardSymbol)
-SELECT userId, accountId, GROUP_CONCAT(DISTINCT symbol) as sb, GROUP_CONCAT(DISTINCT standardSymbol) as sdsb from user_order GROUP BY accountId;
+INSERT into `user` (userId, accountId)
+SELECT userId, accountId from user_order GROUP BY accountId;
 
 -- 用户增量更新临时表
 CREATE TABLE `user_delta` (
   `userId` int(11) NOT NULL COMMENT '用户id',
   `accountId` int(11) DEFAULT NULL COMMENT '账号id',
-  `symbol` varchar(500) DEFAULT NULL COMMENT '品种',
-  `standardSymbol` varchar(500) DEFAULT NULL COMMENT '品种',
   PRIMARY KEY (`userId`),
   KEY `idx_user_accountId` (`accountId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -59,16 +55,15 @@ CREATE TABLE `groups` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(20) DEFAULT NULL COMMENT '组名称',
   `abbr` varchar(255) DEFAULT NULL COMMENT '简称',
-  `symbol` varchar(100) DEFAULT NULL COMMENT '品种',
   `standardSymbol` varchar(100) DEFAULT NULL COMMENT '品种',
   `userCount` int(11) DEFAULT NULL COMMENT '组用户总数',
   `description` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `groups` VALUES ('1', '超级牛散', 'superNB', 'XAUUSD,GBPJPY', 'XAUUSD,GBPJPY', '100', '都是牛B的散户');
-INSERT INTO `groups` VALUES ('2', '测试组1', '测试组1', 'XAUUSD,GBPJPY', 'XAUUSD,GBPJPY', '50', '测试组1');
-INSERT INTO `groups` VALUES ('3', '测试组2', '测试组2', 'XAUUSD,GBPJPY', 'XAUUSD,GBPJPY', '50', '测试组2');
+INSERT INTO `groups` VALUES ('1', '超级牛散', 'superNB', 'XAUUSD,GBPJPY', '100', '都是牛B的散户');
+INSERT INTO `groups` VALUES ('2', '测试组1', '测试组1',  'XAUUSD,GBPJPY', '50', '测试组1');
+INSERT INTO `groups` VALUES ('3', '测试组2', '测试组2', 'XAUUSD,GBPJPY', '50', '测试组2');
 
 
 -- 初始化组成员（随机生成测试）
@@ -137,7 +132,6 @@ CREATE TABLE `user_profit_item` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `accountId` int(11) DEFAULT NULL COMMENT '账号',
   `userId` int(11) DEFAULT NULL COMMENT '用户id',
-  `symbol` varchar(20) DEFAULT NULL COMMENT '品种',
   `standardSymbol` varchar(50) DEFAULT NULL COMMENT '品种',
   `profit` decimal(16,6) DEFAULT NULL COMMENT '收益',
   `returnRate` float DEFAULT NULL COMMENT '收益率',
@@ -146,7 +140,7 @@ CREATE TABLE `user_profit_item` (
   `type` varchar(10) DEFAULT NULL COMMENT '外汇 期货',
   PRIMARY KEY (`id`),
   KEY `idx_user_profit_item_accountId` (`accountId`),
-  KEY `idx_user_profit_item_symbol` (`symbol`)
+  KEY `idx_user_profit_item_symbol` (`standardSymbol`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `user_profit_total` (
@@ -154,14 +148,15 @@ CREATE TABLE `user_profit_total` (
   `userId` int(11) DEFAULT NULL,
   `accountId` int(11) DEFAULT NULL,
   `profit` decimal(16,6) DEFAULT NULL COMMENT '收益',
-  `symbol` varchar(50) DEFAULT NULL COMMENT '品种',
+  `standardSymbol` varchar(50) DEFAULT NULL COMMENT '品种',
   `type` varchar(10) DEFAULT NULL COMMENT '类型：期货、外汇',
   PRIMARY KEY (`id`),
   KEY `idx_user_profit_total_accountId` (`accountId`),
-  KEY `idx_user_profit_total_symbol` (`symbol`)
+  KEY `idx_user_profit_total_symbol` (`standardSymbol`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO user_profit_total(userId, accountId, symbol, profit, type) select userId, accountId, symbol, 0 , '外汇' from `user_order` where symbol != '' GROUP BY accountId, symbol;
+INSERT INTO user_profit_total(userId, accountId, standardSymbol, profit, type)
+select userId, accountId, standardSymbol, 0 , '外汇' from `user_order` where standardSymbol != '' GROUP BY accountId, standardSymbol;
 
 
 CREATE TABLE `user_active` (
@@ -170,7 +165,7 @@ CREATE TABLE `user_active` (
   `accountId` int(11) DEFAULT NULL COMMENT '账号id',
   `tradeCount` int(11) DEFAULT NULL COMMENT '交易次数',
   `tradeDate` date DEFAULT NULL COMMENT '交易日期',
-  `symbol` varchar(30) DEFAULT NULL COMMENT '品种',
+  `standardSymbol` varchar(30) DEFAULT NULL COMMENT '品种',
   `type` varchar(10) DEFAULT NULL COMMENT '外汇 期货',
   PRIMARY KEY (`id`),
   KEY `idx_user_active_accountId` (`accountId`),
@@ -194,7 +189,7 @@ CREATE TABLE `group_profit` (
 
 CREATE TABLE `symbol_profit` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `symbol` varchar(20) DEFAULT NULL COMMENT '品种',
+  `standardSymbol` varchar(20) DEFAULT NULL COMMENT '品种',
   `tradeDate` date DEFAULT NULL,
   `profit` float DEFAULT NULL COMMENT '盈利',
   `loss` float DEFAULT NULL COMMENT '亏损',
@@ -204,14 +199,14 @@ CREATE TABLE `symbol_profit` (
   `tradeMoney` decimal(16,6) DEFAULT NULL COMMENT '交易量',
   `type` varchar(10) DEFAULT NULL COMMENT '外汇 期货',
   PRIMARY KEY (`id`),
-  KEY `idx_symbol_profit_symbol` (`symbol`),
+  KEY `idx_symbol_profit_symbol` (`standardSymbol`),
   KEY `idx_symbol_profit_tradeDate` (`tradeDate`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `symbol_meta` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(20) DEFAULT NULL COMMENT '品种名称',
-  `symbol` varchar(20) DEFAULT NULL COMMENT '品种',
+  `standardSymbol` varchar(20) DEFAULT NULL COMMENT '品种',
   `userCount` int(11) DEFAULT NULL COMMENT '品种总人数',
   `totalProfit` decimal(16,6) DEFAULT NULL COMMENT '品种总盈亏',
   `profitRate` float DEFAULT NULL COMMENT '盈利占比',
@@ -223,11 +218,11 @@ CREATE TABLE `symbol_meta` (
   `profitMoney` decimal(16,6) DEFAULT NULL COMMENT '盈利总金额',
   `lossMoney` decimal(16,6) DEFAULT NULL COMMENT '亏损总金额',
   PRIMARY KEY (`id`),
-  KEY `idx_symbol_meta` (`symbol`)
+  KEY `idx_symbol_meta` (`standardSymbol`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO symbol_meta (`name`, `symbol`, `totalProfit`, `profitRate`, `lossRate`, `breakEvenRate`, `profitMoney`, `lossMoney`, `userCount`)
-SELECT `name`, symbol, 0, 0, 0, 0, 0, 0, 0 from symbol;
+INSERT INTO symbol_meta (`name`, `standardSymbol`, `totalProfit`, `profitRate`, `lossRate`, `breakEvenRate`, `profitMoney`, `lossMoney`, `userCount`)
+SELECT `name`, standardSymbol, 0, 0, 0, 0, 0, 0, 0 from symbol;
 
 -- add index
 -- alter table user_order add index idx_user_order_accountId(`accountId`);
