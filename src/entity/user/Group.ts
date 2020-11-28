@@ -3,7 +3,7 @@ import {Column, Entity, PrimaryColumn, PrimaryGeneratedColumn} from 'typeorm';
 /**
  * 用户分组
  */
-@Entity('groups')
+@Entity('fx_groups')
 export class Group {
 
     @PrimaryGeneratedColumn()

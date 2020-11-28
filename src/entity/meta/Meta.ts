@@ -3,7 +3,7 @@ import {Column, Entity, PrimaryColumn} from 'typeorm';
 /**
  * 概要信息
  */
-@Entity('meta')
+@Entity('fx_meta')
 export class Meta {
     @PrimaryColumn()
     id: number;

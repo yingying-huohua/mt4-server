@@ -3,7 +3,7 @@ import {Column, Entity, PrimaryColumn} from 'typeorm';
 /**
  * 品种
  */
-@Entity('symbol')
+@Entity('fx_symbol')
 export class Symbol {
     @PrimaryColumn()
     id: number;

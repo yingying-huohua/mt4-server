@@ -1,9 +1,9 @@
 import {Column, Entity, PrimaryColumn} from 'typeorm';
 
 /**
- * 用户信息
+ * 外汇用户信息
  */
-@Entity('user')
+@Entity('fx_user')
 export class User {
 
     // 用户id

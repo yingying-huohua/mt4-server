@@ -1,9 +1,7 @@
 import {DbManager} from '../DbManager';
-import {ValidatorUtils} from "../../utils/ValidatorUtils";
-import {PageNoAndPageSizeUtils} from "../../utils/PageNoAndPageSizeUtils";
-import {UserProfitItem} from "../../entity/order/UserProfitItem";
-import {SymbolProfit} from "../../entity/order/SymbolProfit";
-import {GroupProfit} from "../../entity/order/GroupProfit";
+import {ValidatorUtils} from '../../utils/ValidatorUtils';
+import {PageNoAndPageSizeUtils} from '../../utils/PageNoAndPageSizeUtils';
+import {GroupProfit} from '../../entity/order/GroupProfit';
 
 /**
  * 用户组收益

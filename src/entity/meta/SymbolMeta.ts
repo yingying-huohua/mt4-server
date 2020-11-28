@@ -3,7 +3,7 @@ import {Column, Entity, PrimaryColumn} from 'typeorm';
 /**
  * 品种概要信息
  */
-@Entity('symbol_meta')
+@Entity('fx_symbol_meta')
 export class SymbolMeta {
     @PrimaryColumn()
     id: number;

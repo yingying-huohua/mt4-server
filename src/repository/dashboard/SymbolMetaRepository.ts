@@ -47,11 +47,13 @@ export class SymbolMetaRepository {
         let repository = connection.getRepository(SymbolMeta);
         const queryBuilder = await repository.createQueryBuilder();
 
-        queryBuilder.select('sum(SymbolMeta.totalProfit)',         'totalProfit');             // 总收益
-        queryBuilder.addSelect('sum(SymbolMeta.userCount)',           'totalUser');               // 总用户数
-        queryBuilder.addSelect('sum(SymbolMeta.profitUserCount)',     'totalProfitUserCount');    // 盈利总人数
-        queryBuilder.addSelect('sum(SymbolMeta.lossUserCount)',       'totalLossUserCount');      // 亏损总人数
-        queryBuilder.addSelect('sum(SymbolMeta.breakEvenUserCount)',  'totalBreakEvenUserCount'); // 持平总人数
+        queryBuilder.select('totalProfit',         'totalProfit');                           // 总收益
+        queryBuilder.addSelect('SymbolMeta.userCount',           'totalUser');               // 总用户数
+        queryBuilder.addSelect('SymbolMeta.profitUserCount',     'totalProfitUserCount');    // 盈利总人数
+        queryBuilder.addSelect('SymbolMeta.lossUserCount',       'totalLossUserCount');      // 亏损总人数
+        queryBuilder.addSelect('SymbolMeta.breakEvenUserCount',  'totalBreakEvenUserCount'); // 持平总人数
+
+        queryBuilder.andWhere('standardSymbol = :standardSymbol', {standardSymbol: 'x'});
 
         const result = await queryBuilder.getRawMany();
 

@@ -3,7 +3,7 @@ import {Entity, PrimaryColumn} from 'typeorm';
 /**
  * 用户组关系
  */
-@Entity('user_group')
+@Entity('fx_user_group')
 export class UserGroup {
 
     // 组id

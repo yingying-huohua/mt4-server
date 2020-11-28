@@ -3,7 +3,7 @@ import {Column, Entity, PrimaryGeneratedColumn} from 'typeorm';
 /**
  *  每个品种按天按账号汇总： 统计分析每个品种每天或者一段时间用户盈亏收益占比
  */
-@Entity('user_profit_item')
+@Entity('fx_user_profit_item')
 export class UserProfitItem {
 
     // id

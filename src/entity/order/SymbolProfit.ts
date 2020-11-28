@@ -3,7 +3,7 @@ import {Column, Entity, PrimaryColumn, PrimaryGeneratedColumn} from 'typeorm';
 /**
  * 品种收益占比汇总
  */
-@Entity('symbol_profit')
+@Entity('fx_symbol_profit')
 export class SymbolProfit {
 
     // id

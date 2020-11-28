@@ -3,7 +3,7 @@ import {Column, Entity, PrimaryGeneratedColumn} from 'typeorm';
 /**
  *  用户活跃：按用户、按天汇总统计交易次数
  */
-@Entity('user_active')
+@Entity('fx_user_active')
 export class UserActive {
 
     // id

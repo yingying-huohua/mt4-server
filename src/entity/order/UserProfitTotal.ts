@@ -3,7 +3,7 @@ import {Column, Entity, PrimaryGeneratedColumn} from 'typeorm';
 /**
  * 用户总收益汇总表： 区分品种和类型
  */
-@Entity('user_profit_total')
+@Entity('fx_user_profit_total')
 export class UserProfitTotal {
 
     // id

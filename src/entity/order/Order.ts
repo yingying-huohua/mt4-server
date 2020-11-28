@@ -1,6 +1,6 @@
 import {Column, Entity, PrimaryColumn} from 'typeorm';
 
-@Entity('user_order')
+@Entity('fx_user_order')
 export class Order {
     // 账号
     @PrimaryColumn()

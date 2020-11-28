@@ -93,7 +93,7 @@ export class ScheduleJobRepository {
         const connection = await dbManager.getConnection();
 
         // 调用存储过程
-        let query = `CALL update_user_profit('${tradeDateStart}', '${tradeDateEnd}', '${type}')`;
+        let query = `CALL update_fx_user_profit('${tradeDateStart}', '${tradeDateEnd}', '${type}')`;
         const result = await connection.query(query)
 
         return  result;
@@ -107,7 +107,7 @@ export class ScheduleJobRepository {
         const connection = await dbManager.getConnection();
 
         // 调用存储过程
-        let query = `CALL update_group_profit('${tradeDateStart}', '${tradeDateEnd}', '${type}')`;
+        let query = `CALL update_fx_group_profit('${tradeDateStart}', '${tradeDateEnd}', '${type}')`;
         const result = await connection.query(query)
 
         return  result;
@@ -122,7 +122,7 @@ export class ScheduleJobRepository {
         const connection = await dbManager.getConnection();
 
         // 调用存储过程
-        let query = `CALL update_symbol_profit('${tradeDateStart}', '${tradeDateEnd}', '${type}')`;
+        let query = `CALL update_fx_symbol_profit('${tradeDateStart}', '${tradeDateEnd}', '${type}')`;
         const result = await connection.query(query)
 
         return  result;
@@ -136,7 +136,7 @@ export class ScheduleJobRepository {
         const connection = await dbManager.getConnection();
 
         // 调用存储过程
-        let query = `CALL update_symbol_meta('${tradeDateStart}', '${tradeDateEnd}')`;
+        let query = `CALL update_fx_symbol_meta('${tradeDateStart}', '${tradeDateEnd}')`;
         const result = await connection.query(query)
 
         return  result;
@@ -151,7 +151,7 @@ export class ScheduleJobRepository {
         const connection = await dbManager.getConnection();
 
         // 调用存储过程
-        let query = `CALL update_symbol_meta_user_count()`;
+        let query = `CALL update_fx_symbol_meta_user_count()`;
         const result = await connection.query(query)
 
         return  result;
@@ -165,7 +165,7 @@ export class ScheduleJobRepository {
         const connection = await dbManager.getConnection();
 
         // 调用存储过程
-        let query = `CALL update_user_active('${tradeDateStart}', '${tradeDateEnd}', '${type}')`;
+        let query = `CALL update_fx_user_active('${tradeDateStart}', '${tradeDateEnd}', '${type}')`;
         const result = await connection.query(query)
 
         return  result;
@@ -180,7 +180,7 @@ export class ScheduleJobRepository {
         const connection = await dbManager.getConnection();
 
         // 调用存储过程
-        let query = `CALL update_user_profit_total('${tradeDateStart}', '${tradeDateEnd}')`;
+        let query = `CALL update_fx_user_profit_total('${tradeDateStart}', '${tradeDateEnd}')`;
         const result = await connection.query(query)
 
         return  result;
@@ -195,7 +195,7 @@ export class ScheduleJobRepository {
         const connection = await dbManager.getConnection();
 
         // 调用存储过程
-        let query = `CALL delta_import_user('${tradeDateStart}', '${tradeDateEnd}')`;
+        let query = `CALL delta_import_fx_user('${tradeDateStart}', '${tradeDateEnd}')`;
         const result = await connection.query(query)
 
         return  result;
@@ -209,12 +209,10 @@ export class ScheduleJobRepository {
         const connection = await dbManager.getConnection();
 
         // 调用存储过程
-        let query = `CALL delta_import_symbol('${tradeDateStart}', '${tradeDateEnd}')`;
+        let query = `CALL delta_import_fx_symbol('${tradeDateStart}', '${tradeDateEnd}')`;
         const result = await connection.query(query)
 
         return  result;
     }
-
-
 
 }

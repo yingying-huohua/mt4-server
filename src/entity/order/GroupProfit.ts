@@ -3,7 +3,7 @@ import {Column, Entity, PrimaryColumn, PrimaryGeneratedColumn} from 'typeorm';
 /**
  * 用户组收益
  */
-@Entity('group_profit')
+@Entity('fx_group_profit')
 export class GroupProfit {
 
     // id
