@@ -1,10 +1,10 @@
 import {DbManager} from '../DbManager';
 import {ValidatorUtils} from "../../utils/ValidatorUtils";
 import {PageNoAndPageSizeUtils} from "../../utils/PageNoAndPageSizeUtils";
-import {UserProfitItem} from "../../entity/order/UserProfitItem";
-import {Symbol} from "../../entity/order/Symbol";
+import {UserProfitItem} from "../../entity/forex/UserProfitItem";
+import {Symbol} from "../../entity/forex/Symbol";
 import {User} from "../../entity/user/User";
-import {Order} from "../../entity/order/Order";
+import {Order} from "../../entity/forex/Order";
 
 /**
  *

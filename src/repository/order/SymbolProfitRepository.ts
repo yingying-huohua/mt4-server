@@ -1,8 +1,8 @@
 import {DbManager} from '../DbManager';
 import {ValidatorUtils} from "../../utils/ValidatorUtils";
 import {PageNoAndPageSizeUtils} from "../../utils/PageNoAndPageSizeUtils";
-import {UserProfitItem} from "../../entity/order/UserProfitItem";
-import {SymbolProfit} from "../../entity/order/SymbolProfit";
+import {UserProfitItem} from "../../entity/forex/UserProfitItem";
+import {SymbolProfit} from "../../entity/forex/SymbolProfit";
 import {UserActive} from "../../entity/user/UserActive";
 
 /**

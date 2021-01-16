@@ -1,5 +1,5 @@
 import {DbManager} from '../DbManager';
-import {TradeDate} from '../../entity/order/TradeDate';
+import {TradeDate} from '../../entity/forex/TradeDate';
 import {PageNoAndPageSizeUtils} from "../../utils/PageNoAndPageSizeUtils";
 
 

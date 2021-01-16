@@ -1,8 +1,8 @@
 import {DbManager} from '../DbManager';
 import {ValidatorUtils} from "../../utils/ValidatorUtils";
 import {PageNoAndPageSizeUtils} from "../../utils/PageNoAndPageSizeUtils";
-import {UserProfitItem} from "../../entity/order/UserProfitItem";
-import {UserProfitTotal} from "../../entity/order/UserProfitTotal";
+import {UserProfitItem} from "../../entity/forex/UserProfitItem";
+import {UserProfitTotal} from "../../entity/forex/UserProfitTotal";
 
 /**
  * 用户总收益

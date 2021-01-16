@@ -1,7 +1,7 @@
 import {DbManager} from '../DbManager';
 import {ValidatorUtils} from '../../utils/ValidatorUtils';
 import {PageNoAndPageSizeUtils} from '../../utils/PageNoAndPageSizeUtils';
-import {GroupProfit} from '../../entity/order/GroupProfit';
+import {GroupProfit} from '../../entity/forex/GroupProfit';
 
 /**
  * 用户组收益

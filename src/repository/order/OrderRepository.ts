@@ -1,5 +1,5 @@
 import {DbManager} from '../DbManager';
-import {Order} from '../../entity/order/Order';
+import {Order} from '../../entity/forex/Order';
 import {ValidatorUtils} from "../../utils/ValidatorUtils";
 import {PageNoAndPageSizeUtils} from "../../utils/PageNoAndPageSizeUtils";
 
