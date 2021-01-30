@@ -12,6 +12,16 @@ import forexIndex from './routes/dashboard/ForexIndex';
 import futuresIndex from './routes/dashboard/FuturesIndex';
 import auth from './routes/auth/Auth';
 
+// 期货
+import product from './routes/futures/Product';
+import tradingAccount from './routes/futures/TradingAccount';
+import instrument from './routes/futures/Instrument';
+import orderRh from './routes/futures/OrderRh';
+import position from './routes/futures/Position';
+
+
+
+
 // @ts-ignore
 import swaggerDocument from '../swagger.json';
 import fs from 'fs';
@@ -92,6 +102,14 @@ app.use('/tradedate',   tradeDate);
 app.use('/dashboard/symbol',        symbolIndex);   // 品种看板
 app.use('/dashboard/forexIndex',    forexIndex);    // 外汇看板（品种总看板）
 app.use('/dashboard/futuresIndex',  futuresIndex);  // 期货看板
+
+// 期货
+app.use('/futures/product',  product);                 // 产品
+app.use('/futures/tradingAccount',  tradingAccount);   // 账号
+app.use('/futures/instrument',  instrument);           // 合约
+app.use('/futures/orderRh',  orderRh);                 // 订单
+app.use('/futures/position',  position);               // 持仓
+
 
 console.log('**********' + `${environment.environment}初始化完成` + '**************');
 

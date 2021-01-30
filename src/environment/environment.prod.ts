@@ -9,4 +9,9 @@ export const environment = {
     database: 'das',
     dbusername: 'das',
     dbpassword: 'Das_Admin@202011',
+    fu_dbhost: '172.22.139.205',
+    fu_dbport: 3306,
+    fu_database: 'trans_record',
+    fu_dbusername: 'trsreader',
+    fu_dbpassword: 'trsrOK',
 };
