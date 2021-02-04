@@ -32,9 +32,23 @@ const listInstrumentIds = async (req: Request, res: Response) => {
     res.send(result);
 };
 
+// 根据合约id获取品种
+const listProductByInstrumentId = async (req: Request, res: Response) => {
+
+    const instrumentId   = req.query.instrumentId;         // 合约id
+    const result         = await InstrumentRepository.getInstance().listProductId(instrumentId);
+
+    // let products = "";
+    // for (let product of result.result) {
+    //     products += "," + product.product_id;
+    // }
+    // console.log(products)
+    res.send(result);
+};
+
 
 router.get('/list', listInstrument);
 router.get('/ids',  listInstrumentIds);
-
+router.get('/product/list',  listProductByInstrumentId);
 
 export = router;

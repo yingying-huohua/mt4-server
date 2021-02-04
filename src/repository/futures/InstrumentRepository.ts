@@ -1,8 +1,5 @@
-import {DbManager} from '../DbManager';
 import {ValidatorUtils} from '../../utils/ValidatorUtils';
-import {PageNoAndPageSizeUtils} from '../../utils/PageNoAndPageSizeUtils';
 import {FuturesDbManager} from '../FuturesDbManager';
-import {OrderRh} from '../../entity/futures/OrderRh';
 import {Instrument} from '../../entity/futures/Instrument';
 
 /**
@@ -56,6 +53,26 @@ export class InstrumentRepository {
 
         if (ValidatorUtils.isNotEmpty(productId)) {
             queryBuilder.andWhere('product_id = :productId', {productId: productId});
+        }
+        const result = await queryBuilder.getRawMany();
+        return {
+            result: result
+        }
+    }
+
+    /**
+     * 根据合约id获取品种id
+     */
+    async listProductId(instrumentId) {
+        const dbManager = await FuturesDbManager.getInstance();
+        const connection = await dbManager.getConnection();
+        const queryBuilder = connection
+            .getRepository(Instrument)
+            .createQueryBuilder()
+            .select('product_id');
+
+        if (ValidatorUtils.isNotEmpty(instrumentId)) {
+            queryBuilder.andWhere('instrument_id = :instrumentId', {instrumentId: instrumentId});
         }
         const result = await queryBuilder.getRawMany();
         return {
