@@ -119,19 +119,20 @@ const getBBD = async (req: Request, res: Response) => {
     // console.log('listUserProfit >> instrumentIds:', instrumentIdArray);
 
     result  = await OrderRhRepository.getInstance().listBBD(userIdArray, instrumentIdArray,openStart,openEnd);
-
+    // console.info('get bbd : ', result);
     let data = [];
-    let direction0 = {
-        "direction": "多单",
-        "count": result[0].count
-    };
-    let direction1 = {
-        "direction": "空单",
-        "count": result[1].count
-    };
-    data.push(direction0);
-    data.push(direction1);
-
+    if(ValidatorUtils.isNotEmpty(result)){
+        let direction0 = {
+            "direction": "多单",
+            "count": result[0].count
+        };
+        let direction1 = {
+            "direction": "空单",
+            "count": result[1].count
+        };
+        data.push(direction0);
+        data.push(direction1);
+    }
     res.send(data);
 };
 
@@ -167,20 +168,21 @@ const getBBP = async (req: Request, res: Response) => {
     // console.log('listUserProfit >> instrumentIds:', instrumentIdArray);
 
     result  = await OrderRhRepository.getInstance().listBBP(userIdArray, instrumentIdArray,openStart,openEnd);
+    // console.info('get BBP : ', result);
     let data = [];
-    let direction0 = {
-        "direction": "多单",
-        "totalProfit": result[0].totalProfit
-    };
-    let direction1 = {
-        "direction": "空单",
-        "totalProfit": result[1].totalProfit
-    };
-    data.push(direction0);
-    data.push(direction1);
-
+    if(ValidatorUtils.isNotEmpty(result)){
+        let direction0 = {
+            "direction": "多单",
+            "totalProfit": result[0].totalProfit
+        };
+        let direction1 = {
+            "direction": "空单",
+            "totalProfit": result[1].totalProfit
+        };
+        data.push(direction0);
+        data.push(direction1);
+    }
     res.send(data);
-    res.send(result);
 };
 
 // 持仓时间分布

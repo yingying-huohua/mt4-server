@@ -7,8 +7,6 @@
 
 import * as Express from 'express';
 import {Request, Response} from 'express';
-import {ProductRepository} from '../../repository/futures/ProductRepository';
-import {TradingAccountRepository} from '../../repository/futures/TradingAccountRepository';
 import {Constant} from '../../config/Constant';
 import {PositionRepository} from '../../repository/futures/PositionRepository';
 import {ValidatorUtils} from '../../utils/ValidatorUtils';
@@ -41,7 +39,7 @@ const listPosition = async (req: Request, res: Response) => {
 };
 
 
-router.get('/list', listPosition);
+router.get('/list', listPosition); // 当前持仓
 
 
 export = router;

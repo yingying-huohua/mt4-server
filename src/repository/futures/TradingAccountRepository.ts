@@ -93,14 +93,14 @@ export class TradingAccountRepository {
             queryBuilder.andWhere('account_id in (:accountIds)', {accountIds: accountIds});
             countBuilder.andWhere('account_id in (:accountIds)', {accountIds: accountIds});
         }
-        if (ValidatorUtils.isNotEmpty(openStart)) {
-            queryBuilder.andWhere('create_time >= :openStart', {openStart: openStart});
-            countBuilder.andWhere('create_time >= :openStart', {openStart: openStart});
-        }
-        if (ValidatorUtils.isNotEmpty(openEnd)) {
-            queryBuilder.andWhere('create_time <= :openEnd', {openEnd: openEnd});
-            countBuilder.andWhere('create_time <= :openEnd', {openEnd: openEnd});
-        }
+        // if (ValidatorUtils.isNotEmpty(openStart)) {
+        //     queryBuilder.andWhere('create_time >= :openStart', {openStart: openStart});
+        //     countBuilder.andWhere('create_time >= :openStart', {openStart: openStart});
+        // }
+        // if (ValidatorUtils.isNotEmpty(openEnd)) {
+        //     queryBuilder.andWhere('create_time <= :openEnd', {openEnd: openEnd});
+        //     countBuilder.andWhere('create_time <= :openEnd', {openEnd: openEnd});
+        // }
         if (ValidatorUtils.isNotEmpty(sortName)) {
             queryBuilder.addOrderBy(sortName, direction);
         }
