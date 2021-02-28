@@ -2,6 +2,8 @@ import {ValidatorUtils} from '../../utils/ValidatorUtils';
 import {PageNoAndPageSizeUtils} from '../../utils/PageNoAndPageSizeUtils';
 import {FuturesDbManager} from '../FuturesDbManager';
 import {OrderRh} from '../../entity/futures/OrderRh';
+import {Instrument} from '../../entity/futures/Instrument';
+import {Product} from '../../entity/futures/Product';
 
 /**
  *
@@ -35,11 +37,14 @@ export class OrderRhRepository {
         const queryBuilder = connection
             .getRepository(OrderRh)
             .createQueryBuilder()
-            .select('*');
+            .select('investor_id');
         const countBuilder = connection
             .getRepository(OrderRh)
             .createQueryBuilder()
             .select('count(1)', 'count');
+
+        queryBuilder.addSelect('sum(profit)',   'totalProfit');
+
         if (ValidatorUtils.isNotEmpty(accountIds)) {
             queryBuilder.andWhere('investor_id in (:accountIds)', {accountIds: accountIds});
             countBuilder.andWhere('investor_id in (:accountIds)', {accountIds: accountIds});
@@ -56,19 +61,28 @@ export class OrderRhRepository {
             queryBuilder.andWhere('trade_time <= :orderDateEnd', {orderDateEnd: orderDateEnd});
             countBuilder.andWhere('trade_time <= :orderDateEnd', {orderDateEnd: orderDateEnd});
         }
-        if (ValidatorUtils.isNotEmpty(sortName)) {
-            queryBuilder.addOrderBy(sortName, direction);
-        }
+
+        queryBuilder.groupBy('investor_id');
+        countBuilder.groupBy('investor_id');
+
+        // if (ValidatorUtils.isNotEmpty(sortName)) {
+        //     queryBuilder.addOrderBy(sortName, direction);
+        // }
+        queryBuilder.addOrderBy('totalProfit', 'ASC');
+
         pageNo   = PageNoAndPageSizeUtils.getCurrentPageNo(pageNo);
         queryBuilder.take(pageSize);
         queryBuilder.skip(pageNo * pageSize);
         const result = await queryBuilder.getRawMany();
         let count = await countBuilder.getRawMany();
-        for (let countKey of count) {
-            count = countKey['count'];
-        }
+        // console.info('用户收益排行 count ：', count.length)
+
+        // for (let countKey of count) {
+        //     count = countKey['count'];
+        // }
+
         return {
-            count: Number(count),
+            count: Number(count.length),
             result: result
         }
     }
@@ -81,37 +95,56 @@ export class OrderRhRepository {
         const connection = await dbManager.getConnection();
         const queryBuilder = connection
             .getRepository(OrderRh)
-            .createQueryBuilder()
-            .select('*');
+            .createQueryBuilder('orderRh')
+            .select('product.productId, product.productName, SUM(orderRh.profit) as totalProfit')
+            .leftJoin(Instrument, 'instrument', 'instrument.instrumentId = orderRh.instrumentId')
+            .leftJoin(Product, 'product', 'product.productId = instrument.productId');
+
         const countBuilder = connection
             .getRepository(OrderRh)
-            .createQueryBuilder()
-            .select('count(1)', 'count');
+            .createQueryBuilder('orderRh')
+            .select('count(1)', 'count')
+            .leftJoin(Instrument, 'instrument', 'instrument.instrumentId = orderRh.instrumentId')
+            .leftJoin(Product, 'product','product.productId = instrument.productId');
+
         if (ValidatorUtils.isNotEmpty(instrumentIds)) {
-            queryBuilder.andWhere('instrument_id in (:instrumentId)', {instrumentId: instrumentIds});
-            countBuilder.andWhere('instrument_id in (:instrumentId)', {instrumentId: instrumentIds});
+            queryBuilder.andWhere('orderRh.instrument_id in (:instrumentId)', {instrumentId: instrumentIds});
+            countBuilder.andWhere('orderRh.instrument_id in (:instrumentId)', {instrumentId: instrumentIds});
         }
         if (ValidatorUtils.isNotEmpty(orderDateStart)) {
-            queryBuilder.andWhere('trade_time >= :orderDateStart', {orderDateStart: orderDateStart});
-            countBuilder.andWhere('trade_time >= :orderDateStart', {orderDateStart: orderDateStart});
+            queryBuilder.andWhere('orderRh.trade_time >= :orderDateStart', {orderDateStart: orderDateStart});
+            countBuilder.andWhere('orderRh.trade_time >= :orderDateStart', {orderDateStart: orderDateStart});
         }
         if (ValidatorUtils.isNotEmpty(orderDateEnd)) {
-            queryBuilder.andWhere('trade_time <= :orderDateEnd', {orderDateEnd: orderDateEnd});
-            countBuilder.andWhere('trade_time <= :orderDateEnd', {orderDateEnd: orderDateEnd});
+            queryBuilder.andWhere('orderRh.trade_time <= :orderDateEnd', {orderDateEnd: orderDateEnd});
+            countBuilder.andWhere('orderRh.trade_time <= :orderDateEnd', {orderDateEnd: orderDateEnd});
         }
-        if (ValidatorUtils.isNotEmpty(sortName)) {
-            queryBuilder.addOrderBy(sortName, direction);
-        }
+
+        queryBuilder.groupBy('product.productId');
+        countBuilder.groupBy('product.productId');
+
+
+        // if (ValidatorUtils.isNotEmpty(sortName)) {
+        //     queryBuilder.addOrderBy(sortName, direction);
+        // }
+        queryBuilder.addOrderBy('totalProfit', 'ASC');
+
         pageNo   = PageNoAndPageSizeUtils.getCurrentPageNo(pageNo);
-        queryBuilder.take(pageSize);
-        queryBuilder.skip(pageNo * pageSize);
+        // queryBuilder.take(pageSize);
+        // queryBuilder.skip(pageNo * pageSize);
+
+        queryBuilder.limit(pageSize);
+        queryBuilder.offset(pageNo * pageSize);
+
         const result = await queryBuilder.getRawMany();
         let count = await countBuilder.getRawMany();
-        for (let countKey of count) {
-            count = countKey['count'];
-        }
+        // for (let countKey of count) {
+        //     count = countKey['count'];
+        // }
+        /// console.info('品种收益排行 count ：', count.length)
+        // console.info('品种收益排行 result ：', result)
         return {
-            count: Number(count),
+            count: Number(count.length),
             result: result
         }
     }
