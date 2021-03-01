@@ -216,12 +216,12 @@ const getPositionDistribute = async (req: Request, res: Response) => {
     }
     // console.log('listUserProfit >> instrumentIds:', instrumentIdArray);
 
-    result  = await OrderRhRepository.getInstance().listBBP(userIdArray, instrumentIdArray,openStart,openEnd);
+    result  = await OrderRhRepository.getInstance().listTopPosition(userIdArray, instrumentIdArray,openStart,openEnd);
 
-    result = {
-        "product": "动力煤(ZC),动力煤(TC),天然橡胶(ru)",
-        "day": "15,10,8"
-    }
+    // result = {
+    //     "product": "动力煤(ZC),动力煤(TC),天然橡胶(ru)",
+    //     "day": "15,10,8"
+    // }
 
     res.send(result);
 };

@@ -203,4 +203,54 @@ export class OrderRhRepository {
         queryBuilder.groupBy('direction');
         return queryBuilder.getRawMany();
     }
+
+    /**
+     * 持仓时长top10
+     */
+    async listTopPosition(accountIds, instrumentIds, orderDateStart, orderDateEnd) {
+        const dbManager = await FuturesDbManager.getInstance();
+        const connection = await dbManager.getConnection();
+        if(ValidatorUtils.isNotEmpty(accountIds)){
+            return  connection.query('SELECT kc.investor_id, kc.instrument_id, kc.product_id, kc.product_name, kc.open_close_flag as openFlag, kc.trade_time as openTime, \n' +
+                'pc.open_close_flag as closeFlag, pc.trade_time as closeTime, FLOOR((UNIX_TIMESTAMP(pc.trade_time)-UNIX_TIMESTAMP(kc.trade_time))/(60*60*24)) as ccdays\n' +
+                'FROM \n' +
+                '(SELECT t1.investor_id, t1.instrument_id, t3.product_id, t3.product_name, t1.open_close_flag, t1.trade_time from order_rh t1 \n' +
+                'INNER JOIN ctp_instrument t2 ON t1.instrument_id = t2.instrument_id\n' +
+                'INNER JOIN ctp_product t3 ON t2.product_id = t3.product_id \n' +
+                // 'WHERE t1.investor_id in (\'2030020\', \'2019035\', \'360021\', \'2030892\')\n' +
+                'WHERE t1.investor_id in (' + accountIds.join(',') + ')\n' +
+                'and t1.open_close_flag = 0\n' +
+                'GROUP BY t1.investor_id, t2.product_id, t1.open_close_flag\n' +
+                'ORDER BY t1.investor_id, t1.instrument_id, trade_time) as kc\n' +
+                'INNER JOIN \n' +
+                '(SELECT t1.investor_id, t1.instrument_id, t3.product_id, t3.product_name, t1.open_close_flag, max(t1.trade_time) as trade_time from order_rh t1 \n' +
+                'INNER JOIN ctp_instrument t2 ON t1.instrument_id = t2.instrument_id\n' +
+                'INNER JOIN ctp_product t3 ON t2.product_id = t3.product_id \n' +
+                // 'WHERE t1.investor_id in (\'2030020\', \'2019035\', \'360021\', \'2030892\')\n' +
+                'WHERE t1.investor_id in (' + accountIds.join(',') + ')\n' +
+                'and t1.open_close_flag > 0\n' +
+                'GROUP BY t1.investor_id, t2.product_id, t1.open_close_flag\n' +
+                'ORDER BY t1.investor_id, t1.instrument_id, trade_time) as pc ON kc.investor_id = pc.investor_id and kc.instrument_id = pc.instrument_id and kc.product_id = pc.product_id\n' +
+                'ORDER BY ccdays desc\n' +
+                'LIMIT 10')
+        }
+        return  connection.query('SELECT kc.investor_id, kc.instrument_id, kc.product_id, kc.product_name, kc.open_close_flag as openFlag, kc.trade_time as openTime, \n' +
+            'pc.open_close_flag as closeFlag, pc.trade_time as closeTime, FLOOR((UNIX_TIMESTAMP(pc.trade_time)-UNIX_TIMESTAMP(kc.trade_time))/(60*60*24)) as ccdays\n' +
+            'FROM \n' +
+            '(SELECT t1.investor_id, t1.instrument_id, t3.product_id, t3.product_name, t1.open_close_flag, t1.trade_time from order_rh t1 \n' +
+            'INNER JOIN ctp_instrument t2 ON t1.instrument_id = t2.instrument_id\n' +
+            'INNER JOIN ctp_product t3 ON t2.product_id = t3.product_id \n' +
+            'WHERE t1.open_close_flag = 0\n' +
+            'GROUP BY t1.investor_id, t2.product_id, t1.open_close_flag\n' +
+            'ORDER BY t1.investor_id, t1.instrument_id, trade_time) as kc\n' +
+            'INNER JOIN \n' +
+            '(SELECT t1.investor_id, t1.instrument_id, t3.product_id, t3.product_name, t1.open_close_flag, max(t1.trade_time) as trade_time from order_rh t1 \n' +
+            'INNER JOIN ctp_instrument t2 ON t1.instrument_id = t2.instrument_id\n' +
+            'INNER JOIN ctp_product t3 ON t2.product_id = t3.product_id \n' +
+            'WHERE t1.open_close_flag > 0\n' +
+            'GROUP BY t1.investor_id, t2.product_id, t1.open_close_flag\n' +
+            'ORDER BY t1.investor_id, t1.instrument_id, trade_time) as pc ON kc.investor_id = pc.investor_id and kc.instrument_id = pc.instrument_id and kc.product_id = pc.product_id\n' +
+            'ORDER BY ccdays desc\n' +
+            'LIMIT 10')
+    }
 }
